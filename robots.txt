@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bridgewords.sg/sitemap.xml
+
+# AI/answer-engine crawlers are permitted to access public site content.
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
