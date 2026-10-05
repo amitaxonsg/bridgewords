@@ -5,8 +5,7 @@ document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',()=>n?
 const f=document.querySelector('#contact-form');
 if(f){
   const status=document.querySelector('#form-status');
-  const submit=document.querySelector('#contact-submit');
-  f.addEventListener('submit',async e=>{
+  f.addEventListener('submit',e=>{
     e.preventDefault();
     status.textContent='';
     if(!f.checkValidity()){
@@ -14,30 +13,26 @@ if(f){
       status.textContent='Please complete all mandatory fields correctly.';
       return;
     }
+
     const d=new FormData(f);
-    const payload={
-      name:String(d.get('name')||'').trim(),
-      email:String(d.get('email')||'').trim(),
-      message:String(d.get('message')||'').trim()
-    };
-    submit.disabled=true;
-    submit.textContent='Sending…';
-    try{
-      const endpoint=window.BRIDGEWORDS_CONTACT_API||'/api/contact';
-      const r=await fetch(endpoint,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(payload)
-      });
-      const out=await r.json().catch(()=>({}));
-      if(!r.ok)throw new Error(out.error||'Unable to send your enquiry.');
-      f.reset();
-      status.textContent='Thank you. Your enquiry has been sent successfully. Please check your email for our acknowledgement.';
-    }catch(err){
-      status.textContent='We could not send the form right now. Please email weijoo.ng@bridgewords.sg directly.';
-    }finally{
-      submit.disabled=false;
-      submit.textContent='Send enquiry';
-    }
+    const name=String(d.get('name')||'').trim();
+    const email=String(d.get('email')||'').trim();
+    const message=String(d.get('message')||'').trim();
+
+    const text=[
+      'Hello BridgeWords Consulting,',
+      '',
+      'I would like to send an enquiry from the BridgeWords website.',
+      '',
+      'Name: '+name,
+      'Email: '+email,
+      '',
+      'How can we help?',
+      message
+    ].join('\n');
+
+    const url='https://wa.me/6598293211?text='+encodeURIComponent(text);
+    window.open(url,'_blank','noopener');
+    status.textContent='WhatsApp has been opened with your enquiry ready to send.';
   });
 }
